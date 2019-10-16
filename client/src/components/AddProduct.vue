@@ -41,7 +41,7 @@
 
 <script>
 import axios from 'axios'
-const url = "http://localhost:3000";
+const url = "http://35.198.202.116";
 import Swal from 'sweetalert2'
 
 export default {

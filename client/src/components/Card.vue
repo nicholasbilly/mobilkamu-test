@@ -13,6 +13,13 @@
     <v-card-text>
       {{barang.model}}
       </v-card-text>
+      <v-btn
+        color="blue"
+        text
+        @click="seeDetails(barang._id)"
+      >
+        See Details
+      </v-btn>
     <v-card-text>
 
       <div class="my-4 subtitle-1 yellow--text">
@@ -26,14 +33,7 @@
     
     <v-card-actions>
       <v-btn
-        color="white"
-        text
-        @click="seeDetails(barang._id)"
-      >
-        See Details
-      </v-btn>
-      <v-btn
-        color="white"
+        color="danger"
         text
         @click="deleteProduct(barang._id)"
       >
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-const url = "http://localhost:3000";
+const url = "http://35.198.202.116";
 import axios from "axios";
 import { mapState } from "vuex";
 import Swal from 'sweetalert2'

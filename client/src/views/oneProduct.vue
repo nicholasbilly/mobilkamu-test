@@ -5,14 +5,14 @@
       <img :src="image" alt="gambar" >
       <h2 style="color:white;text-align:center;">Price: Rp {{price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}}</h2>
       <p style="color:white;text-align:center;">Fuel Type: {{fuel}}</p>
-      <v-btn color="white" text @click="back">Close</v-btn>
+      <v-btn color="primary" text @click="back">Close</v-btn>
   </v-content>
   </v-container>
 </template>
 
 <script>
 import axios from 'axios'
-const url = "http://localhost:3000";
+const url = "http://35.198.202.116";
 
 export default {
    data () {
