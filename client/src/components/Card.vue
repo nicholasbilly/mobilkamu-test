@@ -10,11 +10,13 @@
     ></v-img>
 
     <v-card-title>{{barang.brand}}</v-card-title>
-    <router-link :to="`/shop/${barang._id}`"><oneProduct/></router-link>
+    <v-card-text>
+      {{barang.model}}
+      </v-card-text>
     <v-card-text>
 
       <div class="my-4 subtitle-1 yellow--text">
-        Rp • {{barang.price}}
+        Rp • {{barang.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}}
       </div>
 
     </v-card-text>
@@ -26,9 +28,9 @@
       <v-btn
         color="white"
         text
-        @click="editProduct(barang._id)"
+        @click="seeDetails(barang._id)"
       >
-        Edit
+        See Details
       </v-btn>
       <v-btn
         color="white"
@@ -44,7 +46,7 @@
 </template>
 
 <script>
-const url = "http://34.67.162.136";
+const url = "http://localhost:3000";
 import axios from "axios";
 import { mapState } from "vuex";
 import Swal from 'sweetalert2'
@@ -56,21 +58,10 @@ import oneProduct from '../views/oneProduct'
     }),
     props: ['barang'],
     components: {
-      oneProduct
+      
     },
 
-    computed: mapState([
-      'page',
-      'cart',
-      'count'
-    ]),
-
     methods: {
-      // reserve () {
-      //   this.loading = true
-      //   setTimeout(() => (this.loading = false), 500)
-      // },
-
       deleteProduct(id) {
       Swal.fire({
         title: "Are you sure?",
@@ -83,8 +74,7 @@ import oneProduct from '../views/oneProduct'
         })
         .then(result => {
           if (result.value) {
-            let token = localStorage.getItem('token')
-            axios.delete(`${url}/products/${id}`, {headers: {token}})
+            axios.delete(`${url}/mobil/${id}`)
             .then(deleted => {
               Swal.fire("Deleted!", "Your file has been deleted.", "success");
               this.$store.dispatch('getProducts')
@@ -95,20 +85,10 @@ import oneProduct from '../views/oneProduct'
        .catch(console.log)
       },
 
-      editProduct(id) {
+      seeDetails(id) {
         this.$router.push(`/admin/${id}`)
       },
-
-      addcart(payload) {
-        // this.$store.commit('ADDTOCART', payload)
-        this.$store.commit('ADDCOUNT', 1)
-        let token = localStorage.getItem('token')
-        axios.patch(`http://34.67.162.136/carts/${payload}`, {}, {headers: {token}})
-      }
     },
-  //   updated() {
-  //   this.$store.dispatch('getProducts')
-  // }
   }
 </script>
 

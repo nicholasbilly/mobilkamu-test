@@ -1,38 +1,39 @@
 <template>
-  <v-row justify="center">
-    <v-dialog v-model="dialog" persistent max-width="600px">
-      <template v-slot:activator="{ on }">
-        <v-btn color="primary" dark v-on="on" text>Details</v-btn>
-      </template>
-      <h1 style="text-align:center;">{{name}}</h1>
+  <v-container>
+  <v-content>
+      <h1 style="text-align:center;">{{brand}} {{model}}</h1>
       <img :src="image" alt="gambar" >
-      <p style="color:white;text-align:center;">Price: {{price}}</p>
+      <h2 style="color:white;text-align:center;">Price: Rp {{price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}}</h2>
+      <p style="color:white;text-align:center;">Fuel Type: {{fuel}}</p>
       <v-btn color="white" text @click="back">Close</v-btn>
-    </v-dialog>
-  </v-row>
+  </v-content>
+  </v-container>
 </template>
 
 <script>
 import axios from 'axios'
-const url = "http://34.67.162.136";
+const url = "http://localhost:3000";
 
 export default {
    data () {
       return {
           dialog: false,
-          name: '',
+          brand: '',
+          model: '',
           image: '',
-          price: ''
+          price: '',
+          fuel: ''
       }
    },
 
    methods: {
        fetchData() {
            let productId = this.$route.params.id 
-           let token = localStorage.getItem('token')
-           axios.get(`${url}/products/${productId}`, {headers: {token}})
+           axios.get(`${url}/mobil/${productId}`)
            .then(({data}) => {
-               this.name = data.name
+               this.brand = data.brand
+               this.model= data.model
+               this.fuel = data.fuel
                this.image = data.image
                this.price = data.price
            })
@@ -51,6 +52,9 @@ export default {
       this.fetchData();
         } 
     }
+   },
+   created() {
+     this.fetchData()
    }
 }
 </script>
