@@ -1,0 +1,114 @@
+<template>
+<v-card
+    :loading="loading"
+    class="text-xs-center ma-3"
+    max-width="374"
+  >
+    <v-img
+      height="250"
+      :src="barang.image"
+    ></v-img>
+
+    <v-card-title>{{barang.brand}}</v-card-title>
+    <router-link :to="`/shop/${barang._id}`"><oneProduct/></router-link>
+    <v-card-text>
+
+      <div class="my-4 subtitle-1 yellow--text">
+        Rp • {{barang.price}}
+      </div>
+
+    </v-card-text>
+
+    <v-divider class="mx-4"></v-divider>
+
+    
+    <v-card-actions>
+      <v-btn
+        color="white"
+        text
+        @click="editProduct(barang._id)"
+      >
+        Edit
+      </v-btn>
+      <v-btn
+        color="white"
+        text
+        @click="deleteProduct(barang._id)"
+      >
+       Delete
+      </v-btn>
+    </v-card-actions>
+  </v-card>
+      
+  
+</template>
+
+<script>
+const url = "http://34.67.162.136";
+import axios from "axios";
+import { mapState } from "vuex";
+import Swal from 'sweetalert2'
+import oneProduct from '../views/oneProduct'
+  export default {
+    data: () => ({
+      loading: false,
+      selection: 1,
+    }),
+    props: ['barang'],
+    components: {
+      oneProduct
+    },
+
+    computed: mapState([
+      'page',
+      'cart',
+      'count'
+    ]),
+
+    methods: {
+      // reserve () {
+      //   this.loading = true
+      //   setTimeout(() => (this.loading = false), 500)
+      // },
+
+      deleteProduct(id) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+        })
+        .then(result => {
+          if (result.value) {
+            let token = localStorage.getItem('token')
+            axios.delete(`${url}/products/${id}`, {headers: {token}})
+            .then(deleted => {
+              Swal.fire("Deleted!", "Your file has been deleted.", "success");
+              this.$store.dispatch('getProducts')
+             })
+            .catch(console.log)     
+          }
+       })
+       .catch(console.log)
+      },
+
+      editProduct(id) {
+        this.$router.push(`/admin/${id}`)
+      },
+
+      addcart(payload) {
+        // this.$store.commit('ADDTOCART', payload)
+        this.$store.commit('ADDCOUNT', 1)
+        let token = localStorage.getItem('token')
+        axios.patch(`http://34.67.162.136/carts/${payload}`, {}, {headers: {token}})
+      }
+    },
+  //   updated() {
+  //   this.$store.dispatch('getProducts')
+  // }
+  }
+</script>
+
