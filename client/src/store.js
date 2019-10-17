@@ -19,7 +19,6 @@ export default new Vuex.Store({
 
     actions: {
         getProducts(context) {
-            let token = localStorage.getItem('token')
             axios.get(`${url}/mobil`)
             .then(({data}) => {
                  context.commit('GETPRODUCTS', data)
